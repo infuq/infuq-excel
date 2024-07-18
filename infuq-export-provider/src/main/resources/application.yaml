@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: infuq-export-provider
+  redis:
+    host: 192.168.10.21
+    port: 6379
+    database: 2
+    password: 9527
+  datasource:
+    url: jdbc:mysql://192.168.1.100:3306/db0?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 9527
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maxPoolSize: 10
+      minIdle: 5
+
+server:
+  port: 58081
+  tomcat:
+    basedir: /Users/infuq/logs/tmp
+    max-threads: 100
+    min-spare-threads: 20
+    accept-count: 100
+
