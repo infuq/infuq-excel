@@ -9,7 +9,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>infuq-excel-consumer</artifactId>
-    <name>infuq-export-consumer</name>
+    <name>infuq-excel-consumer</name>
 
     <dependencies>
 

@@ -3,12 +3,10 @@ package com.infuq.common.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 
 @Builder
 @Data
-public class ExportTaskDTO {
+public class ExportTask {
 
     /**
      * 记录ID

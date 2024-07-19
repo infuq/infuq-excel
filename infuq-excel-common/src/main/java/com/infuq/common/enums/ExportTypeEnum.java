@@ -3,7 +3,8 @@ package com.infuq.common.enums;
 public enum ExportTypeEnum {
 
 
-    CUSTOMER_ORDER_INFO("0001", "导出订货单信息")
+    STORE_CUSTOMER_ORDER("0001", "导出订货单信息"),
+    STORE_RETURN_ORDER("0002", "导出退货单信息")
 
     ;
 

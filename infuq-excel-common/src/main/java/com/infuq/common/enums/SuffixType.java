@@ -2,8 +2,8 @@ package com.infuq.common.enums;
 
 public enum SuffixType {
 
-    Xlsx("xlsx"),
-    Pdf("pdf");
+    xlsx("xlsx"),
+    pdf("pdf");
 
     private String fileType;
 

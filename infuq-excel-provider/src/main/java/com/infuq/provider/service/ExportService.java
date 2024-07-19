@@ -64,6 +64,7 @@ public class ExportService {
                 .exportRecordId(record.getExportRecordId())
                 .build();
 
+        String tag = ""
         producer.send(exportTaskDTO, tag);
 
         redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(exportTaskDTO));

@@ -1,7 +1,7 @@
 package com.infuq.common.enums;
 
 
-public enum FileStatus {
+public enum ExportFileStatus {
 
     CREATE_SUCCESS(1, "创建成功"),
     EXPORTING(2, "正在生成"),
@@ -10,7 +10,7 @@ public enum FileStatus {
     DOWNLOADED(5, "已下载"),
     EXPIRE(6, "已过期");
 
-    FileStatus(int code, String desc) {
+    ExportFileStatus(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
