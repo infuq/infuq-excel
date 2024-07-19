@@ -10,13 +10,13 @@
 	</parent>
 
 	<groupId>com.infuq</groupId>
-	<artifactId>infuq-export</artifactId>
+	<artifactId>infuq-excel</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>infuq-export</name>
+	<name>infuq-excel</name>
 	<modules>
-		<module>infuq-export-consumer</module>
-		<module>infuq-export-provider</module>
+		<module>infuq-excel-consumer</module>
+		<module>infuq-excel-provider</module>
 	</modules>
 
 
