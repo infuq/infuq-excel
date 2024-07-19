@@ -16,6 +16,14 @@ spring:
       maxPoolSize: 10
       minIdle: 5
 
+mq:
+  name-server: 192.168.31.133:8876
+  access-key: ...
+  secret-key: ...
+  producer:
+    id: GID_FLINK_TOOLS
+    topic: TEST
+
 server:
   port: 58081
   tomcat:
