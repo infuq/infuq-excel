@@ -18,6 +18,7 @@
 		<module>infuq-excel-consumer</module>
 		<module>infuq-excel-provider</module>
         <module>infuq-excel-dao</module>
+        <module>infuq-excel-service</module>
     </modules>
 
 
