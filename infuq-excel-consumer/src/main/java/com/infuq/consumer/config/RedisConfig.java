@@ -3,7 +3,7 @@ package com.infuq.consumer.config;
 import com.infuq.common.constants.CommonConstant;
 import com.infuq.consumer.handler.RedisExportFileErrorHandler;
 import com.infuq.consumer.listener.redis.RedisExportListener;
-import com.infuq.consumer.service.ExportService;
+import com.infuq.export.ExportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;

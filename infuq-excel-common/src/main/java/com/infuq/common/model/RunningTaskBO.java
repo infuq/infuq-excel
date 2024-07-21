@@ -4,12 +4,12 @@ package com.infuq.common.model;
 import lombok.Data;
 
 @Data
-public class RunningExportTaskBO {
+public class RunningTaskBO {
 
     /**
      * 导出记录ID
      */
-    private Long exportRecordId;
+    private Long recordId;
 
     /**
      * 开始运行时间

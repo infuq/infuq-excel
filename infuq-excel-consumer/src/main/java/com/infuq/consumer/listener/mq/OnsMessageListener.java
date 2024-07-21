@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.aliyun.openservices.ons.api.Action;
 import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
+import com.infuq.common.model.TaskBO;
 import com.infuq.consumer.listener.mq.business.BusinessMQListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +28,10 @@ public class OnsMessageListener implements com.aliyun.openservices.ons.api.Messa
     }
 
     private Action consume(Message message, ConsumeContext context, String tag, String key) {
-        //MQListener<?> listener = allListener.get(tag);
+        BusinessMQListener<?> listener = allListener.get(tag);
 
-        BusinessMQListener<?> listener = allListener.get("dataChangeListener");
         if (listener != null) {
-            listener.handler(JSON.parseObject(message.getBody(), SinkData.class), message.getUserProperties());
+            listener.handler(JSON.parseObject(message.getBody(), TaskBO.class), message.getUserProperties());
         }
         return Action.CommitMessage;
     }

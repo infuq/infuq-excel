@@ -24,8 +24,8 @@ mq:
     id: GID_ELASTICSEARCH_TOOLS
     topic: TEST
     tags:
-      - t_order
-      - t_user
+      - upload
+      - export
     consumeMessageBatchMaxSize: 3
     consumeThreadMin: 20
     consumeThreadMax: 64

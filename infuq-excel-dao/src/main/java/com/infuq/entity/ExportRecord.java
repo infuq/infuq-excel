@@ -19,7 +19,7 @@ public class ExportRecord {
      * 记录ID
      */
     @TableId
-    private Long exportRecordId;
+    private Long recordId;
 
     /**
      * 用户ID
@@ -35,11 +35,6 @@ public class ExportRecord {
      * 文件名
      */
     private String fileName;
-
-    /**
-     * 类型
-     */
-    private String fileTypeDesc;
 
     /**
      * 文件后缀
@@ -77,10 +72,9 @@ public class ExportRecord {
     private String requestBody;
 
     /**
-     * 导出类型值
-     *
+     * 业务类型
      */
-    private String exportType;
+    private String businessType;
 
 
 }

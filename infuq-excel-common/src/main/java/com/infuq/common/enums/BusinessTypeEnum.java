@@ -1,14 +1,14 @@
 package com.infuq.common.enums;
 
-public enum ExportTypeEnum {
+public enum BusinessTypeEnum {
 
 
-    STORE_CUSTOMER_ORDER("0001", "导出订货单信息"),
-    STORE_RETURN_ORDER("0002", "导出退货单信息")
+    STORE_CUSTOMER_ORDER("0001", "订货单信息"),
+    STORE_RETURN_ORDER("0002", "退货单信息")
 
     ;
 
-    ExportTypeEnum(String value, String desc) {
+    BusinessTypeEnum(String value, String desc) {
         this.value = value;
         this.desc = desc;
     }

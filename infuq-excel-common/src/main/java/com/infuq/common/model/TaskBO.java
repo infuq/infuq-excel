@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Builder
 @Data
-public class ExportTaskBO {
+public class TaskBO {
 
     /**
-     * 记录ID
+     * 导出或导入的记录ID
      */
-    private Long exportRecordId;
+    private Long recordId;
 
 }

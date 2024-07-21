@@ -1,8 +1,8 @@
-package com.infuq.consumer.service;
+package com.infuq.export;
 
 import com.infuq.common.enums.ExportFileStatus;
-import com.infuq.common.model.ExportTaskBO;
-import com.infuq.consumer.model.RunningExportTaskInfo;
+import com.infuq.common.model.RunningTaskBO;
+import com.infuq.common.model.TaskBO;
 import com.infuq.entity.ExportRecord;
 import com.infuq.mapper.ExportRecordMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +26,15 @@ public class ExportService {
     @Autowired
     private ExportRecordMapper exportRecordMapper;
 
-    private final Map<Long, RunningExportTaskInfo> runningTaskMap = new ConcurrentHashMap<>();
+    private final Map<Long, RunningTaskBO> runningTaskMap = new ConcurrentHashMap<>();
 
 
-    public void handleExport(ExportTaskBO task) {
+    public void handleExport(TaskBO task) {
 
-        Long exportRecordId = task.getExportRecordId();
+        Long recordId = task.getRecordId();
 
         // 1.查询导出记录
-        ExportRecord exportRecord = exportRecordMapper.selectById(exportRecordId);
+        ExportRecord exportRecord = exportRecordMapper.selectById(recordId);
         if (exportRecord == null) {
             log.error("导出记录不存在");
             return;
@@ -42,12 +42,12 @@ public class ExportService {
         // 2.校验状态
         Integer fileStatus = exportRecord.getFileStatus();
         if (fileStatus != null && fileStatus.compareTo(ExportFileStatus.WAIT_DOWNLOAD.getCode()) >= 0) {
-            log.warn("导出任务已处理,记录ID:{}", exportRecordId);
+            log.warn("导出任务已处理,记录ID:{}", recordId);
             return;
         }
         // 3.校验是否正在被处理
-        if (runningTaskMap.containsKey(exportRecordId)) {
-            log.warn("导出任务正在处理中,记录ID:{}", exportRecordId);
+        if (runningTaskMap.containsKey(recordId)) {
+            log.warn("导出任务正在处理中,记录ID:{}", recordId);
             return;
         }
         // 4.限制导出任务数量(并发数量20个)
@@ -56,24 +56,24 @@ public class ExportService {
         }
 
 
-        String key = "export:" + exportRecordId;
+        String key = "export:" + recordId;
         RLock rLock = redissonClient.getLock(key);
 
         try {
             if (!rLock.tryLock(1, 30 * 60, TimeUnit.SECONDS)) {
-                log.warn("短时间内同一个导出任务被重复处理,记录ID:{},获取锁失败", exportRecordId);
+                log.warn("短时间内同一个导出任务被重复处理,记录ID:{},获取锁失败", recordId);
                 return;
             }
-            log.info("加锁成功,记录ID:" + exportRecordId);
+            log.info("加锁成功,记录ID:" + recordId);
 
-            RunningExportTaskInfo runningTask = new RunningExportTaskInfo();
-            runningTask.setExportRecordId(exportRecordId);
+            RunningTaskBO runningTask = new RunningTaskBO();
+            runningTask.setRecordId(recordId);
             runningTask.setStartRunningTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             runningTask.setThreadName(Thread.currentThread().getName());
-            runningTaskMap.put(exportRecordId, runningTask);
+            runningTaskMap.put(recordId, runningTask);
             log.info("当前正在处理导出任务数共:{}个,任务记录ID:{}", runningTaskMap.size(), runningTaskMap.keySet());
 
-            String exportType = exportRecord.getExportType();
+            String exportType = exportRecord.getBusinessType();
             // 根据 exportType 获取对应业务的导出策略类, 执行具体的导出业务
 
             //Thread.sleep(26 * 60 * 1000);
@@ -87,11 +87,11 @@ public class ExportService {
             exportRecordMapper.updateById(exportRecord);
 
         } finally {
-            runningTaskMap.remove(exportRecordId);
+            runningTaskMap.remove(recordId);
 
             if (rLock.isLocked() && rLock.isHeldByCurrentThread()) {
                 // 释放锁
-                log.info("释放锁,记录ID:" + exportRecordId);
+                log.info("释放锁,记录ID:" + recordId);
                 rLock.unlock();
             }
         }

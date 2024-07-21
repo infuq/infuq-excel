@@ -1,22 +1,22 @@
 package com.infuq.consumer.listener.mq.business;
 
-
-import com.infuq.common.model.ExportTaskBO;
+import com.infuq.common.model.TaskBO;
+import com.infuq.export.ExportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Properties;
 
-/**
- * 数据变化
- */
 @Slf4j
-@Service
-public class ExportListener implements BusinessMQListener<ExportTaskBO> {
+@Service(value = "export")
+public class ExportListener implements BusinessMQListener<TaskBO> {
+
+    @Resource
+    private ExportService exportService;
 
     @Override
-    public void handler(ExportTaskBO data, Properties userProperties) {
-
-
+    public void handler(TaskBO task, Properties userProperties) {
+        exportService.handleExport(task);
     }
 }

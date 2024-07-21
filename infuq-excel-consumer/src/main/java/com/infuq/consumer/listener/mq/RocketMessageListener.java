@@ -1,6 +1,7 @@
 package com.infuq.consumer.listener.mq;
 
 import com.alibaba.fastjson.JSON;
+import com.infuq.common.model.TaskBO;
 import com.infuq.consumer.listener.mq.business.BusinessMQListener;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class RocketMessageListener implements MessageListenerConcurrently {
 
             BusinessMQListener<?> listener = allListener.get("dataChangeListener");
             if (listener != null) {
-                listener.handler(JSON.parseObject(body, SinkData.class), null);
+                listener.handler(JSON.parseObject(body, TaskBO.class), null);
             }
         });
 

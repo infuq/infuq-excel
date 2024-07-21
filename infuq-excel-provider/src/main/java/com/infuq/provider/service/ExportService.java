@@ -4,10 +4,10 @@ package com.infuq.provider.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.infuq.common.constants.CommonConstant;
+import com.infuq.common.constants.SuffixTypeConstant;
+import com.infuq.common.enums.BusinessTypeEnum;
 import com.infuq.common.enums.ExportFileStatus;
-import com.infuq.common.enums.ExportTypeEnum;
-import com.infuq.common.enums.SuffixType;
-import com.infuq.common.model.ExportTaskBO;
+import com.infuq.common.model.TaskBO;
 import com.infuq.common.req.StoreCustomerOrderReq;
 import com.infuq.entity.ExportRecord;
 import com.infuq.mapper.ExportRecordMapper;
@@ -43,30 +43,29 @@ public class ExportService {
 
         ExportRecord record = ExportRecord.builder()
                 .userId(userId)
+                .enterpriseId(enterpriseId)
+                .businessType(BusinessTypeEnum.STORE_CUSTOMER_ORDER.getValue())
                 .fileName("订货单信息-202405301324413413271.xlsx")
+                .fileSuffix(SuffixTypeConstant.XLSX)
                 .fileStatus(ExportFileStatus.CREATE_SUCCESS.getCode())
-                .fileTypeDesc("订货单信息")
-                .fileSuffix(SuffixType.xlsx.getFileType())
+                .requestBody(JSON.toJSONString(req)) // 记录当前请求的数据
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .requestBody(JSON.toJSONString(req)) // 记录当前请求的数据
-                .exportType(ExportTypeEnum.STORE_CUSTOMER_ORDER.getValue())
-                .enterpriseId(enterpriseId)
                 .build();
 
         // 1.向数据库插入导出记录
         exportRecordMapper.insert(record);
 
 
-        ExportTaskBO exportTask = ExportTaskBO.builder()
-                .exportRecordId(record.getExportRecordId())
+        TaskBO task = TaskBO.builder()
+                .recordId(record.getRecordId())
                 .build();
 
         // 2.方式一 发送MQ
-        producer.send(exportTask, CommonConstant.MQ_EXPORT_CUSTOMER_CUSTOMER_ORDER);
+        producer.send(task, "export");
 
         // 2.方式二 REDIS
-        redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(exportTask));
+        redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(task));
 
     }
 

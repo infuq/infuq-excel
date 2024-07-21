@@ -2,12 +2,12 @@ spring:
   application:
     name: infuq-export-provider
   redis:
-    host: 192.168.10.21
+    host: 192.168.31.129
     port: 6379
     database: 2
     password: 9527
   datasource:
-    url: jdbc:mysql://192.168.1.100:3306/db0?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://192.168.31.129:3306/db0?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 9527
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,11 +17,11 @@ spring:
       minIdle: 5
 
 mq:
-  name-server: 192.168.31.133:8876
+  name-server: 192.168.31.129:8876
   access-key: ...
   secret-key: ...
   producer:
-    id: GID_FLINK_TOOLS
+    id: GID_EXCEL_TOOLS
     topic: TEST
 
 server:

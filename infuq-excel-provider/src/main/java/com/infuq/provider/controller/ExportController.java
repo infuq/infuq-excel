@@ -15,6 +15,10 @@ public class ExportController {
     @Autowired
     private ExportService exportService;
 
+    @GetMapping("checkConn")
+    public String checkConn() {
+        return "check success...";
+    }
 
     @GetMapping("exportStoreCustomerOrder")
     public void exportStoreCustomerOrder() throws Exception {

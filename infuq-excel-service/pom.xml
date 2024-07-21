@@ -5,9 +5,11 @@
         <groupId>com.infuq</groupId>
         <artifactId>infuq-excel</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>infuq-excel-service</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <name>infuq-excel-service</name>
 
 
@@ -17,10 +19,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
+            <groupId>com.infuq</groupId>
+            <artifactId>infuq-excel-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.infuq</groupId>
+            <artifactId>infuq-excel-dao</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.17.3</version>
+        </dependency>
+
     </dependencies>
 </project>
