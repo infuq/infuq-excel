@@ -1,10 +1,10 @@
 package com.infuq.consumer.service;
 
-import com.infuq.common.enums.FileStatus;
-import com.infuq.common.model.ExportRecord;
-import com.infuq.common.model.ExportTaskDTO;
-import com.infuq.consumer.mapper.ExportRecordMapper;
+import com.infuq.common.enums.ExportFileStatus;
+import com.infuq.common.model.ExportTaskBO;
 import com.infuq.consumer.model.RunningExportTaskInfo;
+import com.infuq.entity.ExportRecord;
+import com.infuq.mapper.ExportRecordMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -29,9 +29,9 @@ public class ExportService {
     private final Map<Long, RunningExportTaskInfo> runningTaskMap = new ConcurrentHashMap<>();
 
 
-    public void handleExport(ExportTaskDTO exportTaskDTO) {
+    public void handleExport(ExportTaskBO task) {
 
-        Long exportRecordId = exportTaskDTO.getExportRecordId();
+        Long exportRecordId = task.getExportRecordId();
 
         // 1.查询导出记录
         ExportRecord exportRecord = exportRecordMapper.selectById(exportRecordId);
@@ -41,7 +41,7 @@ public class ExportService {
         }
         // 2.校验状态
         Integer fileStatus = exportRecord.getFileStatus();
-        if (fileStatus != null && fileStatus.compareTo(FileStatus.WAIT_DOWNLOAD.getCode()) >= 0) {
+        if (fileStatus != null && fileStatus.compareTo(ExportFileStatus.WAIT_DOWNLOAD.getCode()) >= 0) {
             log.warn("导出任务已处理,记录ID:{}", exportRecordId);
             return;
         }
@@ -80,7 +80,7 @@ public class ExportService {
 
         } catch (Exception e) {
 
-            exportRecord.setFileStatus(FileStatus.EXPORT_ERROR.getCode());
+            exportRecord.setFileStatus(ExportFileStatus.EXPORT_ERROR.getCode());
             exportRecord.setRemark(e.getMessage());
 
             // 更新导出记录

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class ExportTask {
+public class ExportTaskBO {
 
     /**
      * 记录ID

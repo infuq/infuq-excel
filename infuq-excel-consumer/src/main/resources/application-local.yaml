@@ -15,3 +15,17 @@ spring:
     hikari:
       maxPoolSize: 10
       minIdle: 5
+
+mq:
+  name-server: 192.168.31.133:8876
+  access-key: ...
+  secret-key: ...
+  consumer:
+    id: GID_ELASTICSEARCH_TOOLS
+    topic: TEST
+    tags:
+      - t_order
+      - t_user
+    consumeMessageBatchMaxSize: 3
+    consumeThreadMin: 20
+    consumeThreadMax: 64

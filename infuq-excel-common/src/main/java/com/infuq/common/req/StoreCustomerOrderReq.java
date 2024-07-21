@@ -15,4 +15,9 @@ public class StoreCustomerOrderReq {
      */
     private Long userId;
 
+    /**
+     * 企业
+     */
+    private Long enterpriseId;
+
 }

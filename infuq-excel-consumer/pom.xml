@@ -18,6 +18,11 @@
             <artifactId>infuq-excel-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.infuq</groupId>
+            <artifactId>infuq-excel-dao</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.redisson</groupId>

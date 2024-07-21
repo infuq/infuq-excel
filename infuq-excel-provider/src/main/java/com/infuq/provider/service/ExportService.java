@@ -3,18 +3,14 @@ package com.infuq.provider.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyun.mq.http.model.TopicMessage;
-import com.aliyun.openservices.ons.api.Message;
-import com.aliyun.openservices.ons.api.Producer;
-import com.aliyun.openservices.ons.api.SendResult;
 import com.infuq.common.constants.CommonConstant;
+import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.enums.ExportTypeEnum;
-import com.infuq.common.enums.FileStatus;
 import com.infuq.common.enums.SuffixType;
-import com.infuq.common.model.ExportRecord;
-import com.infuq.common.model.ExportTaskDTO;
+import com.infuq.common.model.ExportTaskBO;
 import com.infuq.common.req.StoreCustomerOrderReq;
-import com.infuq.provider.mapper.ExportRecordMapper;
+import com.infuq.entity.ExportRecord;
+import com.infuq.mapper.ExportRecordMapper;
 import com.infuq.provider.producer.MQProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RedissonClient;
@@ -39,35 +35,38 @@ public class ExportService {
     @Resource
     private RedisTemplate redisTemplate;
 
-    public void exportStoreCustomerOrder(StoreCustomerOrderReq req) {
+    public void exportStoreCustomerOrder(StoreCustomerOrderReq req) throws Exception {
 
-        req.setUserId(154539762039238656L);
+        Long userId = 154539762039238656L;
+        Long enterpriseId = 154539761477201920L;
+        req.setUserId(userId);
 
         ExportRecord record = ExportRecord.builder()
-                .userId(154539762039238656L)
+                .userId(userId)
                 .fileName("订货单信息-202405301324413413271.xlsx")
-                .fileStatus(FileStatus.CREATE_SUCCESS.getCode())
+                .fileStatus(ExportFileStatus.CREATE_SUCCESS.getCode())
                 .fileTypeDesc("订货单信息")
-                .fileSuffix(SuffixType.Xlsx.getFileType())
+                .fileSuffix(SuffixType.xlsx.getFileType())
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
-                .requestBody(JSON.toJSONString(req))
-                .exportType(ExportTypeEnum.CUSTOMER_ORDER_INFO.getValue())
-                .enterpriseId(154539761477201920L)
+                .requestBody(JSON.toJSONString(req)) // 记录当前请求的数据
+                .exportType(ExportTypeEnum.STORE_CUSTOMER_ORDER.getValue())
+                .enterpriseId(enterpriseId)
                 .build();
 
         // 1.向数据库插入导出记录
         exportRecordMapper.insert(record);
 
 
-        ExportTaskDTO exportTaskDTO = ExportTaskDTO.builder()
+        ExportTaskBO exportTask = ExportTaskBO.builder()
                 .exportRecordId(record.getExportRecordId())
                 .build();
 
-        String tag = ""
-        producer.send(exportTaskDTO, tag);
+        // 2.方式一 发送MQ
+        producer.send(exportTask, CommonConstant.MQ_EXPORT_CUSTOMER_CUSTOMER_ORDER);
 
-        redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(exportTaskDTO));
+        // 2.方式二 REDIS
+        redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(exportTask));
 
     }
 

@@ -1,8 +1,7 @@
-package com.infuq.consumer.listener;
+package com.infuq.consumer.listener.redis;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson2.JSON;
-import com.infuq.common.model.ExportTaskDTO;
+import com.infuq.common.model.ExportTaskBO;
 import com.infuq.consumer.service.ExportService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -32,9 +31,9 @@ public class RedisExportListener implements MessageListener {
 
         String msg = new String(message.getBody());
         String jsonStr = StringEscapeUtils.unescapeJava(msg.substring(1, msg.length() - 1));
-        ExportTaskDTO exportTaskDTO = JSONObject.parseObject(jsonStr, ExportTaskDTO.class);
+        ExportTaskBO task = JSONObject.parseObject(jsonStr, ExportTaskBO.class);
 
-        exportService.handleExport(exportTaskDTO);
+        exportService.handleExport(task);
 
     }
 

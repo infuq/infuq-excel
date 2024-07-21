@@ -1,10 +1,10 @@
-package com.infuq.consumer.model;
+package com.infuq.common.model;
 
 
 import lombok.Data;
 
 @Data
-public class RunningExportTaskInfo {
+public class RunningExportTaskBO {
 
     /**
      * 导出记录ID

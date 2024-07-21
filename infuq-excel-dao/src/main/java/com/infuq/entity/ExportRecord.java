@@ -1,11 +1,9 @@
-package com.infuq.common.model;
+package com.infuq.entity;
 
-import lombok.Builder;
-import lombok.Data;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
