@@ -28,7 +28,7 @@ public class EasyExcelExportService {
 
         // 构造数据
         List<ExportRecordVO> dataList = new ArrayList<>();
-        for (int i = 0; i < 120000; i++) {
+        for (int i = 0; i < 10; i++) {
             ExportRecordVO r = new ExportRecordVO();
             r.setFileName("全部订货单" + i);
             r.setFileSuffix(i % 2 == 0 ? "xlsx" :  "pdf");
@@ -36,7 +36,7 @@ public class EasyExcelExportService {
         }
 
         // 写入Excel
-        byte[] bytes = EasyExcelUtil.write(1, "全部订货单", ExportRecordVO.class, dataList);
+        byte[] bytes = EasyExcelUtil.write(0, "全部订货单", ExportRecordVO.class, dataList);
 
 
         // 上传到OSS
