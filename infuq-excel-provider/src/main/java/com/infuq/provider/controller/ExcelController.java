@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("export")
-public class ExportController {
+public class ExcelController {
 
     @Autowired
     private ExportService exportService;

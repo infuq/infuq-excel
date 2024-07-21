@@ -18,14 +18,15 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
 
+@Component
 @Configuration
 @Slf4j
 public class RedisConfig {
-
 
     @Resource
     private Environment environment;

@@ -65,7 +65,7 @@ public class ExportService {
         producer.send(task, "export");
 
         // 2.方式二 REDIS
-        redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(task));
+        //redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(task));
 
     }
 

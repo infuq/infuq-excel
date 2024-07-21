@@ -24,8 +24,9 @@ public class RocketMessageListener implements MessageListenerConcurrently {
 
         messageList.forEach(message -> {
             byte[] body = message.getBody();
+            String tag = message.getTags();
 
-            BusinessMQListener<?> listener = allListener.get("dataChangeListener");
+            BusinessMQListener<?> listener = allListener.get(tag);
             if (listener != null) {
                 listener.handler(JSON.parseObject(body, TaskBO.class), null);
             }

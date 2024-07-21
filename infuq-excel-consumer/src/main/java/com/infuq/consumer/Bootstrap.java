@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(exclude = {
         MongoAutoConfiguration.class
 })
-@ComponentScan(basePackages = {"com.infuq.consumer"})
+@ComponentScan(basePackages = {"com.infuq"})
 public class Bootstrap {
 
     public static void main(String[] args) {

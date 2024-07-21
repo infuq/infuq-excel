@@ -8,9 +8,9 @@ import com.infuq.mapper.ExportRecordMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class ExportService {
 
-    @Autowired
+    @Resource
     private RedissonClient redissonClient;
-    @Autowired
+    @Resource
     private ExportRecordMapper exportRecordMapper;
 
     private final Map<Long, RunningTaskBO> runningTaskMap = new ConcurrentHashMap<>();
@@ -73,8 +73,8 @@ public class ExportService {
             runningTaskMap.put(recordId, runningTask);
             log.info("当前正在处理导出任务数共:{}个,任务记录ID:{}", runningTaskMap.size(), runningTaskMap.keySet());
 
-            String exportType = exportRecord.getBusinessType();
-            // 根据 exportType 获取对应业务的导出策略类, 执行具体的导出业务
+            String businessType = exportRecord.getBusinessType();
+            // 根据 businessType 获取对应业务的导出策略类, 执行具体的导出业务
 
             //Thread.sleep(26 * 60 * 1000);
 
