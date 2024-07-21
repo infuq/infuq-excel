@@ -2,7 +2,7 @@ package com.infuq.provider.controller;
 
 
 import com.infuq.common.req.StoreCustomerOrderReq;
-import com.infuq.provider.service.ExportService;
+import com.infuq.provider.service.ExportProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExcelController {
 
     @Autowired
-    private ExportService exportService;
+    private ExportProviderService exportProviderService;
 
     @GetMapping("checkConn")
     public String checkConn() {
@@ -23,7 +23,7 @@ public class ExcelController {
     @GetMapping("exportStoreCustomerOrder")
     public void exportStoreCustomerOrder() throws Exception {
         StoreCustomerOrderReq req = new StoreCustomerOrderReq();
-        exportService.exportStoreCustomerOrder(req);
+        exportProviderService.exportStoreCustomerOrder(req);
     }
 
 

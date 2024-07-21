@@ -2,14 +2,13 @@ package com.infuq.provider.service;
 
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.infuq.common.constants.CommonConstant;
 import com.infuq.common.constants.SuffixTypeConstant;
 import com.infuq.common.enums.BusinessTypeEnum;
 import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.model.TaskBO;
 import com.infuq.common.req.StoreCustomerOrderReq;
 import com.infuq.entity.ExportRecord;
+import com.infuq.export.EasyExcelExportService;
 import com.infuq.mapper.ExportRecordMapper;
 import com.infuq.provider.producer.MQProducer;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,7 @@ import java.time.LocalDateTime;
 
 @Service
 @Slf4j
-public class ExportService {
+public class ExportProviderService {
 
     @Autowired
     private MQProducer producer;
@@ -34,6 +33,8 @@ public class ExportService {
     private RedissonClient redissonClient;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private EasyExcelExportService easyExcelExportService;
 
     public void exportStoreCustomerOrder(StoreCustomerOrderReq req) throws Exception {
 
@@ -62,10 +63,14 @@ public class ExportService {
                 .build();
 
         // 2.方式一 发送MQ
-        producer.send(task, "export");
+        //producer.send(task, "export");
 
         // 2.方式二 REDIS
         //redisTemplate.convertAndSend(CommonConstant.REDIS_EXPORT_CHANNEL, JSONObject.toJSONString(task));
+
+
+        easyExcelExportService.handleExport(task);
+
 
     }
 
