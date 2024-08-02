@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>com.infuq</groupId>
         <artifactId>infuq-excel</artifactId>
@@ -8,38 +8,27 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>infuq-excel-consumer</artifactId>
-    <name>infuq-excel-consumer</name>
+    <artifactId>infuq-excel-web</artifactId>
+    <name>infuq-excel-web</name>
+
+
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.infuq</groupId>
             <artifactId>infuq-excel-common</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>com.infuq</groupId>
             <artifactId>infuq-excel-service</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.17.3</version>
-        </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--            <version>2.7.2</version>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>io.lettuce</groupId>
-            <artifactId>lettuce-core</artifactId>
-            <version>5.3.4.RELEASE</version>
         </dependency>
     </dependencies>
 
@@ -71,6 +60,7 @@
             </plugin>
         </plugins>
     </build>
+
 
 
 </project>

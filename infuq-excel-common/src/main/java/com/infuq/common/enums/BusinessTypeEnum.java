@@ -3,20 +3,20 @@ package com.infuq.common.enums;
 public enum BusinessTypeEnum {
 
 
-    STORE_CUSTOMER_ORDER("0001", "订货单信息"),
-    STORE_RETURN_ORDER("0002", "退货单信息")
+    STORE_CUSTOMER_ORDER(1, "订货单信息"),
+    STORE_RETURN_ORDER(2, "退货单信息")
 
     ;
 
-    BusinessTypeEnum(String value, String desc) {
+    BusinessTypeEnum(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }
 
-    private String value;
+    private Integer value;
     private String desc;
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 

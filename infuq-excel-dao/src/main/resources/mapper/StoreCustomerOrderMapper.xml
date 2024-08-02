@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.infuq.mapper.StoreCustomerOrderMapper">
+
+    <select id="downloadTemplate" resultType="com.infuq.common.rsp.DownloadStoreCustomerOrderTemplateRsp">
+        SELECT
+            t1.customer_order_no,
+            t1.linkman,
+            t1.phone,
+            t1.address,
+            t1.create_time,
+            t2.warehouse_name,
+            t3.enterprise_name,
+            t4.customer_name AS goodsOwner,
+            t5.customer_name AS customerName
+        FROM
+            store_customer_order t1
+            LEFT JOIN warehouse t2 ON t1.warehouse_id = t2.warehouse_id
+            LEFT JOIN store_enterprise t3 ON t1.enterprise_id = t3.enterprise_id
+            LEFT JOIN store_customer t4 ON t4.customer_id = t1.goods_owner_id
+            LEFT JOIN store_customer t5 ON t5.customer_id = t1.customer_id
+        ORDER BY t1.create_time DESC
+        LIMIT #{condition.offset}, #{condition.rowCount}
+    </select>
+
+
+
+</mapper>

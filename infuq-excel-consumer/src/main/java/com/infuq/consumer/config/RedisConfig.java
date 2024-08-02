@@ -2,8 +2,8 @@ package com.infuq.consumer.config;
 
 import com.infuq.common.constants.CommonConstant;
 import com.infuq.consumer.handler.RedisExportFileErrorHandler;
-import com.infuq.consumer.listener.redis.RedisExportListener;
-import com.infuq.export.ExportService;
+import com.infuq.consumer.listener.redis.RedisDownloadListener;
+import com.infuq.download.AsyncDownloadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
@@ -73,8 +73,8 @@ public class RedisConfig {
     /**
      * 创建监听器/订阅者
      */
-    public RedisExportListener redisExportListener(ExportService exportService) {
-        return new RedisExportListener(exportService);
+    public RedisDownloadListener redisExportListener(AsyncDownloadService downloadService) {
+        return new RedisDownloadListener(downloadService);
     }
 
     /**
@@ -97,7 +97,7 @@ public class RedisConfig {
      * 建立频道与监听器绑定关系
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory, ExportService exportService) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(RedisConnectionFactory redisConnectionFactory, AsyncDownloadService exportService) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
         container.addMessageListener(redisExportListener(exportService), channelTopic());

@@ -1,9 +1,9 @@
 server:
-  port: 59081
+  port: 58081
 
 spring:
   application:
-    name: infuq-excel-consumer
+    name: infuq-excel-provider
   redis:
     host: 192.168.31.129
     port: 6379
@@ -37,21 +37,12 @@ mq:
   name-server: 192.168.31.129:8876
   access-key: ...
   secret-key: ...
-  consumer:
-    id: GID_EXCEL_CONSUMER_TOOLS
+  producer:
+    id: GID_EXCEL_PROVIDER_TOOLS
     topic: TEST
-    tags:
-      - upload
-      - download
-    consumeMessageBatchMaxSize: 3
-    consumeThreadMin: 20
-    consumeThreadMax: 64
-
 
 oss:
   access-key: ...
   secretKey: ...
   endpoint: oss-cn-hangzhou.aliyuncs.com
   bucket-names: dc-uploadfile
-
-

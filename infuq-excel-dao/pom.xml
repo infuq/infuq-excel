@@ -49,5 +49,13 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.27</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>com.infuq</groupId>
+            <artifactId>infuq-excel-common</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 </project>
