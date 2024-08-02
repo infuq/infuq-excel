@@ -4,4 +4,4 @@ infuq-export.iml
 logs/
 target/
 infuq-excel-consumer/src/main/resources/application-work.yaml
-infuq-excel-provider/src/main/resources/application-work.yaml
+infuq-excel-web/src/main/resources/application-work.yaml
