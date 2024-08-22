@@ -38,7 +38,7 @@ public class StoreCustomerOrderExcelParser implements ExcelParser<StoreCustomerO
 
 
     @Override
-    public Class<?> head() {
+    public Class<?> headClazz() {
         return StoreCustomerOrderHead.class;
     }
 

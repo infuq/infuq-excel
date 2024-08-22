@@ -34,7 +34,8 @@ public class ExcelParseService {
         String batchNo = "EASY_EXCEL_UPLOAD:" + start;
 
         // 多线程解析
-        EasyExcelFactory.read(in, parser.head(), new ExcelReadListener<T>(failList, asyncParseRetList, batchNo, parser, redisTemplate)).sheet(0).doRead();
+        // 官网介绍 ReadListener 不允许被 Spring 管理, 每次读取Excel都需要创建新对象 !
+        EasyExcelFactory.read(in, parser.headClazz(), new ExcelReadListener<T>(failList, asyncParseRetList, batchNo, parser, redisTemplate)).sheet(0).doRead();
 
         int success = 0;
         int fail = failList.size();

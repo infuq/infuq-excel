@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ExcelParser<R> {
 
-    Class<?> head();
+    Class<?> headClazz();
 
     // 解析阶段一 不涉及数据库层面的解析 只是单一的判断数据是否没有填写
     void parse(R row, List<R> tmpList, List<R> failList);
