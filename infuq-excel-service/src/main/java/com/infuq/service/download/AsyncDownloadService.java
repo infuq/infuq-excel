@@ -4,7 +4,7 @@ import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.model.RunningTaskBO;
 import com.infuq.common.model.TaskBO;
 import com.infuq.entity.DownloadRecord;
-import com.infuq.handler.StoreCustomerOrderAsyncDownloadExcel;
+import com.infuq.util.download.easyexcel.ExcelDownloadService;
 import com.infuq.mapper.DownloadRecordMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -27,7 +27,7 @@ public class AsyncDownloadService {
     @Resource
     private DownloadRecordMapper downloadRecordMapper;
     @Resource
-    private StoreCustomerOrderAsyncDownloadExcel storeCustomerOrderAsyncDownloadExcel;
+    private ExcelDownloadService storeCustomerOrderAsyncDownloadExcel;
 
     private final Map<Long, RunningTaskBO> runningTaskMap = new ConcurrentHashMap<>();
 

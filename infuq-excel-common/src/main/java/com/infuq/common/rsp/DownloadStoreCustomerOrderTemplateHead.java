@@ -4,7 +4,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 @Data
-public class DownloadStoreCustomerOrderTemplateRsp {
+public class DownloadStoreCustomerOrderTemplateHead {
 
     @ExcelProperty(value = "单号")
     private String customerOrderNo;

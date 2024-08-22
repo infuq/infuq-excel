@@ -1,16 +1,17 @@
-package com.infuq.handler;
+package com.infuq.util.download.easyexcel;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.aliyun.oss.OSS;
-import com.infuq.common.req.DownloadStoreCustomerOrderTemplateReq;
-import com.infuq.common.rsp.DownloadStoreCustomerOrderTemplateRsp;
+import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
+import com.infuq.common.req.Pager;
 import com.infuq.config.OssConfig;
 import com.infuq.mapper.StoreCustomerOrderMapper;
-import com.infuq.util.easyexcel.WriteExcelFinishCallback;
-import com.infuq.util.easyexcel.convert.LocalDateStringConverter;
+import com.infuq.util.download.ExcelDownloader;
+import com.infuq.util.download.WriteExcelFinishCallback;
+import com.infuq.util.download.easyexcel.converter.LocalDateStringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class StoreCustomerOrderAsyncDownloadExcel {
+public class ExcelDownloadService {
 
     @Resource
     private StoreCustomerOrderMapper storeCustomerOrderMapper;
@@ -43,12 +44,12 @@ public class StoreCustomerOrderAsyncDownloadExcel {
     public String download(String requestBody) {
 
 
-        DownloadStoreCustomerOrderTemplateReq request = new DownloadStoreCustomerOrderTemplateReq();
+        DownloadStoreCustomerOrderTemplateCondition request = new DownloadStoreCustomerOrderTemplateCondition();
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        download(request, outputStream, () -> {
-            // 回调
-        });
+//        download(request, outputStream, () -> {
+//            // 回调
+//        });
 
         byte[] byteArray = outputStream.toByteArray();
 
@@ -59,16 +60,19 @@ public class StoreCustomerOrderAsyncDownloadExcel {
     }
 
 
-    public void download(DownloadStoreCustomerOrderTemplateReq request, OutputStream outputStream, WriteExcelFinishCallback callback) {
+    public <T extends Pager> void download(ExcelDownloader<T> downloader, T condition, Class<?> headClazz, OutputStream outputStream, WriteExcelFinishCallback callback) {
 
         StopWatch watcher = new StopWatch();
-        watcher.start("下载订货单模板数据");
+        watcher.start("下载数据");
 
         ExcelWriter writer = EasyExcel
                 .write(outputStream)
-                //.inMemory(true)
+                //.withTemplate() 模板
+                //.inMemory(true) 是否在内存处理,默认会生成临时文件以节约内存.内存模式效率会更好,但是容易OOM
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .registerConverter(new LocalDateStringConverter())
+                //.excelType(ExcelTypeEnum.XLSX) 类型
+                //.autoCloseStream(true) // 自动关闭写入的流
                 .build();
 
 
@@ -78,15 +82,17 @@ public class StoreCustomerOrderAsyncDownloadExcel {
         int sheetMaxLine = 100000;
         int sheetLine = 0;
 
+
         // 当前页
         int curPage = 1;
         // 分页查询每页数量
         int rowCount = 10000;
         for (;;) {
             // 分页查询
-            request.setOffset((curPage - 1) * rowCount);
-            request.setRowCount(rowCount);
-            List<DownloadStoreCustomerOrderTemplateRsp> dList = storeCustomerOrderMapper.downloadTemplate(request);
+            condition.setOffset((curPage - 1) * rowCount);
+            condition.setRowCount(rowCount);
+            List<Object> dList = downloader.selectList(condition);
+
             if (CollectionUtils.isNotEmpty(dList)) {
                 sheetLine = sheetLine + dList.size();
 
@@ -94,7 +100,7 @@ public class StoreCustomerOrderAsyncDownloadExcel {
                 if (sheetLine >= sheetMaxLine) {
 
                     System.out.println("线程:" + Thread.currentThread().getName() + "查询第 " + curPage + " 页数据,每页 " + rowCount + " 条,写入第 " + (sheetNo + 1) + " 个Sheet.");
-                    write(sheetNo, writer, dList);
+                    writeExcel(sheetNo, writer, dList, headClazz);
 
                     // 切换到新的Sheet
                     sheetNo = sheetNo + 1;
@@ -108,7 +114,7 @@ public class StoreCustomerOrderAsyncDownloadExcel {
 
                 // 还没有达到每个Sheet的行数上限
                 System.out.println("线程:" + Thread.currentThread().getName() + "查询第 " + curPage + " 页数据,每页 " + rowCount + " 条,写入第 " + (sheetNo + 1) + " 个Sheet.");
-                write(sheetNo, writer, dList);
+                writeExcel(sheetNo, writer, dList, headClazz);
 
             } else {
                 // 没有数据了
@@ -132,11 +138,11 @@ public class StoreCustomerOrderAsyncDownloadExcel {
     }
 
 
-    private void write(int sheetNo, ExcelWriter writer, List<?> data) {
+    private void writeExcel(int sheetNo, ExcelWriter writer, List<?> data, Class<?> headClazz) {
         WriteSheet sheet = EasyExcel
                 .writerSheet(sheetNo)
                 .sheetName("全部订货单下载模板" + ((sheetNo > 0) ? ("-" + sheetNo) : ""))
-                .head(DownloadStoreCustomerOrderTemplateRsp.class)
+                .head(headClazz)
                 .build();
         writer.write(data, sheet);
     }

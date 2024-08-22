@@ -7,8 +7,8 @@ import com.infuq.common.constants.SuffixTypeConstant;
 import com.infuq.common.enums.BusinessTypeEnum;
 import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.model.TaskBO;
-import com.infuq.common.req.DownloadStoreCustomerOrderTemplateReq;
-import com.infuq.common.rsp.DownloadStoreCustomerOrderTemplateRsp;
+import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
+import com.infuq.common.rsp.DownloadStoreCustomerOrderTemplateHead;
 import com.infuq.entity.DownloadRecord;
 import com.infuq.mapper.DownloadRecordMapper;
 import com.infuq.mapper.StoreCustomerOrderMapper;
@@ -35,12 +35,12 @@ public class StoreCustomerOrderDownloadService {
     private MQProducer producer;
 
 
-    public List<DownloadStoreCustomerOrderTemplateRsp> downloadTemplate(DownloadStoreCustomerOrderTemplateReq request) {
+    public List<DownloadStoreCustomerOrderTemplateHead> downloadTemplate(DownloadStoreCustomerOrderTemplateCondition request) {
         return storeCustomerOrderMapper.downloadTemplate(request);
     }
 
 
-    public void asyncDownloadTemplate(DownloadStoreCustomerOrderTemplateReq req) throws Exception {
+    public void asyncDownloadTemplate(DownloadStoreCustomerOrderTemplateCondition req) throws Exception {
 
         Long userId = 154539762039238656L;
         Long enterpriseId = 154539761477201920L;

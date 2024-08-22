@@ -3,7 +3,7 @@ package com.infuq.common.req;
 import lombok.Data;
 
 @Data
-public class DownloadStoreCustomerOrderTemplateReq extends Pager {
+public class DownloadStoreCustomerOrderTemplateCondition extends Pager {
 
     /**
      * 仓库

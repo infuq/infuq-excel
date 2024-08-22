@@ -1,4 +1,4 @@
-package com.infuq.util.easyexcel;
+package com.infuq.util.download;
 
 @FunctionalInterface
 public interface WriteExcelFinishCallback {
