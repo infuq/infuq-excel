@@ -1,4 +1,4 @@
-package com.infuq.util.download.easyexcel.converter;
+package com.infuq.core.download.easyexcel.converter;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;

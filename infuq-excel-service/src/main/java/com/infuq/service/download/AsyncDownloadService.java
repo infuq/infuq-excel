@@ -4,7 +4,7 @@ import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.model.RunningTaskBO;
 import com.infuq.common.model.TaskBO;
 import com.infuq.entity.DownloadRecord;
-import com.infuq.util.download.easyexcel.ExcelDownloadService;
+import com.infuq.core.download.easyexcel.ExcelDownloadService;
 import com.infuq.mapper.DownloadRecordMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

@@ -1,4 +1,4 @@
-package com.infuq.util.download.easyexcel;
+package com.infuq.core.download.easyexcel;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -9,13 +9,10 @@ import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
 import com.infuq.common.req.Pager;
 import com.infuq.config.OssConfig;
 import com.infuq.mapper.StoreCustomerOrderMapper;
-import com.infuq.util.download.ExcelDownloader;
-import com.infuq.util.download.WriteExcelFinishCallback;
-import com.infuq.util.download.easyexcel.converter.LocalDateStringConverter;
+import com.infuq.core.download.easyexcel.converter.LocalDateStringConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 
 import javax.annotation.Resource;
@@ -60,6 +57,10 @@ public class ExcelDownloadService {
     }
 
 
+    /**
+     * 将下载的数据写入到OutputStream
+     *
+     */
     public <T extends Pager> void download(ExcelDownloader<T> downloader, T condition, Class<?> headClazz, OutputStream outputStream, WriteExcelFinishCallback callback) {
 
         StopWatch watcher = new StopWatch();

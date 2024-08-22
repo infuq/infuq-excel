@@ -1,9 +1,9 @@
-package com.infuq.util.upload.easyexcel;
+package com.infuq.core.upload.easyexcel;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.infuq.common.rsp.ParseExcelRsp;
-import com.infuq.util.upload.ExcelParser;
+import com.infuq.core.upload.ExcelParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;

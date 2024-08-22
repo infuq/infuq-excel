@@ -3,7 +3,7 @@ package com.infuq.service.upload.easyexcel;
 
 import com.infuq.common.req.StoreCustomerOrderHead;
 import com.infuq.common.rsp.ParseExcelRsp;
-import com.infuq.util.upload.ExcelParser;
+import com.infuq.core.upload.ExcelParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

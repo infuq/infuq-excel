@@ -1,4 +1,4 @@
-package com.infuq.util.upload;
+package com.infuq.core.upload;
 
 import com.infuq.common.rsp.ParseExcelRsp;
 

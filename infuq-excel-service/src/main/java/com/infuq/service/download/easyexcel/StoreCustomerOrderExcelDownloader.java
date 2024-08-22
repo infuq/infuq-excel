@@ -3,7 +3,7 @@ package com.infuq.service.download.easyexcel;
 
 import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
 import com.infuq.mapper.StoreCustomerOrderMapper;
-import com.infuq.util.download.ExcelDownloader;
+import com.infuq.core.download.easyexcel.ExcelDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

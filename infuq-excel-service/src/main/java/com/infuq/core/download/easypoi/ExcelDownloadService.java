@@ -1,4 +1,4 @@
-package com.infuq.util.download.easypoi;
+package com.infuq.core.download.easypoi;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
@@ -7,7 +7,7 @@ import cn.afterturn.easypoi.handler.inter.IExcelExportServer;
 import com.aliyun.oss.OSS;
 import com.infuq.common.req.Pager;
 import com.infuq.config.OssConfig;
-import com.infuq.util.download.WriteExcelFinishCallback;
+import com.infuq.core.download.easyexcel.WriteExcelFinishCallback;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,6 +31,10 @@ public class ExcelDownloadService {
     private OssConfig ossConfig;
 
 
+    /**
+     * 将下载的数据写入到OutputStream
+     *
+     */
     public <T extends Pager> void download(IExcelExportServer downloader, T condition, Class<?> headClazz, OutputStream outputStream, WriteExcelFinishCallback callback) {
 
 
@@ -43,6 +47,9 @@ public class ExcelDownloadService {
         try {
             workbook.write(outputStream);
             workbook.close();
+
+            // 回调
+            callback.doFinish();
         } catch (Exception e) {
 
         }

@@ -2,8 +2,6 @@ package com.infuq.service.download.easypoi;
 
 
 import cn.afterturn.easypoi.handler.inter.IExcelExportServer;
-import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
-import com.infuq.util.download.ExcelDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
