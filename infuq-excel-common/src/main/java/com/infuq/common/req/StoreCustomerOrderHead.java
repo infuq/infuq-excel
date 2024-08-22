@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StoreCustomerOrderUploadReq {
+public class StoreCustomerOrderHead {
 
     @ExcelProperty(value = "门店名称")
     private String storeName;
@@ -20,7 +20,7 @@ public class StoreCustomerOrderUploadReq {
     private String storeCustomerOrderNo;
 
     @ExcelProperty(value = "错误原因")
-    private String errorMsg;
+    private String errorCause;
 
 
 }

@@ -1,9 +1,8 @@
-package com.infuq.upload;
+package com.infuq.util.upload.easyexcel;
 
 import com.alibaba.excel.EasyExcelFactory;
 import com.infuq.common.rsp.ParseExcelRsp;
-import com.infuq.util.easyexcel.ExcelParser;
-import com.infuq.util.easyexcel.ExcelReadListener;
+import com.infuq.util.upload.ExcelParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -19,41 +18,36 @@ import java.util.concurrent.Future;
 
 @Service
 @Slf4j
-public class EasyExcelUploadService {
+public class ExcelParseService {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
 
-    public <T> ParseExcelRsp handleUpload(InputStream in, Class<T> clazz, ExcelParser<T> parser) {
+    public <T> ParseExcelRsp parse(InputStream in, ExcelParser<T> parser) {
 
         List<T> failList = new LinkedList<>();
-        List<Future<ParseExcelRsp>> parseRetList = new ArrayList<>();
+        List<Future<ParseExcelRsp>> asyncParseRetList = new ArrayList<>();
 
         SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String start = dateTimeFormatter.format(new Date());
         String batchNo = "EASY_EXCEL_UPLOAD:" + start;
 
-
         // 多线程解析
-        EasyExcelFactory.read(in, clazz, new ExcelReadListener<T>(failList, parseRetList, batchNo, parser, redisTemplate))
-                .sheet(0)
-                .doRead();
+        EasyExcelFactory.read(in, parser.head(), new ExcelReadListener<T>(failList, asyncParseRetList, batchNo, parser, redisTemplate)).sheet(0).doRead();
 
         int success = 0;
         int fail = failList.size();
 
         // 主线程等待
-        for (Future<ParseExcelRsp> f : parseRetList) {
+        for (Future<ParseExcelRsp> f : asyncParseRetList) {
             try {
                 ParseExcelRsp obj = f.get();
                 if (obj.getSuccessSize() != null) {
-                    int _success = obj.getSuccessSize();
-                    success = _success + success;
+                    success = obj.getSuccessSize() + success;
                 }
                 if (obj.getFailSize() != null) {
-                    int _fail = obj.getFailSize();
-                    fail = _fail + fail;
+                    fail = obj.getFailSize() + fail;
                 }
             } catch (Exception e) {
                 log.error("异常", e);

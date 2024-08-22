@@ -1,8 +1,9 @@
-package com.infuq.util.easyexcel;
+package com.infuq.util.upload.easyexcel;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.infuq.common.rsp.ParseExcelRsp;
+import com.infuq.util.upload.ExcelParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
@@ -11,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+/**
+ * 当前线程只负责简单解析Excel文件
+ * 涉及数据库层面的校验由线程池里的线程负责
+ *
+ */
 @Slf4j
 public class ExcelReadListener<T> implements ReadListener<T> {
 
@@ -19,8 +25,8 @@ public class ExcelReadListener<T> implements ReadListener<T> {
     private List<T> tmpList = new ArrayList<>(batchLine);
     private List<T> failList;
 
-    // 异步结果
-    private List<Future<ParseExcelRsp>> parseRetList;
+    // 异步解析结果
+    private List<Future<ParseExcelRsp>> asyncParseRetList;
 
     // 解析器
     private ExcelParser<T> parser;
@@ -38,14 +44,15 @@ public class ExcelReadListener<T> implements ReadListener<T> {
         }
     });
 
+
     public ExcelReadListener() {}
     public ExcelReadListener(List<T> failList,
-                             List<Future<ParseExcelRsp>> parseRetList,
+                             List<Future<ParseExcelRsp>> asyncParseRetList,
                              String batchNo,
                              ExcelParser<T> parser,
                              RedisTemplate<String, Object> redisTemplate) {
         this.failList = failList;
-        this.parseRetList = parseRetList;
+        this.asyncParseRetList = asyncParseRetList;
         this.batchNo = batchNo;
 
         this.redisTemplate = redisTemplate;
@@ -111,7 +118,7 @@ public class ExcelReadListener<T> implements ReadListener<T> {
                     }
                 });
 
-        parseRetList.add(completableFuture);
+        asyncParseRetList.add(completableFuture);
     }
 
     @Override

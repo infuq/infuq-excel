@@ -2,7 +2,7 @@ package com.infuq.consumer.listener.redis;
 
 import com.alibaba.fastjson.JSONObject;
 import com.infuq.common.model.TaskBO;
-import com.infuq.download.AsyncDownloadService;
+import com.infuq.service.download.AsyncDownloadService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.data.redis.connection.Message;

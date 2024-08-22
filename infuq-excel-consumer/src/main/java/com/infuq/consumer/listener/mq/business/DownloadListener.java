@@ -1,7 +1,7 @@
 package com.infuq.consumer.listener.mq.business;
 
 import com.infuq.common.model.TaskBO;
-import com.infuq.download.AsyncDownloadService;
+import com.infuq.service.download.AsyncDownloadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

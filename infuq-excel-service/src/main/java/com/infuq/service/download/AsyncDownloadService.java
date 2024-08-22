@@ -1,4 +1,4 @@
-package com.infuq.download;
+package com.infuq.service.download;
 
 import com.infuq.common.enums.ExportFileStatus;
 import com.infuq.common.model.RunningTaskBO;

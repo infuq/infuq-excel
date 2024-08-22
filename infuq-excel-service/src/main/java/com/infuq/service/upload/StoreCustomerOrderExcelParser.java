@@ -1,14 +1,15 @@
-package com.infuq.handler;
+package com.infuq.service.upload;
 
-import com.alibaba.excel.util.StringUtils;
-import com.infuq.common.req.StoreCustomerOrderUploadReq;
+
+import com.infuq.common.req.StoreCustomerOrderHead;
 import com.infuq.common.rsp.ParseExcelRsp;
-import com.infuq.util.easyexcel.ExcelParser;
+import com.infuq.util.upload.ExcelParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StopWatch;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-public class StoreCustomerOrderUploadExcelParser implements ExcelParser<StoreCustomerOrderUploadReq> {
+public class StoreCustomerOrderExcelParser implements ExcelParser<StoreCustomerOrderHead> {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -36,16 +37,21 @@ public class StoreCustomerOrderUploadExcelParser implements ExcelParser<StoreCus
     });
 
 
+    @Override
+    public Class<?> head() {
+        return StoreCustomerOrderHead.class;
+    }
+
     // 解析阶段一 不涉及数据库层面的解析 只是单一的判断数据是否没有填写
-    public void parse(StoreCustomerOrderUploadReq row, List<StoreCustomerOrderUploadReq> tmpList, List<StoreCustomerOrderUploadReq> failList) {
+    public void parse(StoreCustomerOrderHead row, List<StoreCustomerOrderHead> tmpList, List<StoreCustomerOrderHead> failList) {
 
         if (StringUtils.isEmpty(row.getStoreName())) {
-            row.setErrorMsg("门店名称不能为空");
+            row.setErrorCause("门店名称不能为空");
             failList.add(row);
             return;
         }
         if (StringUtils.isEmpty(row.getStoreCustomerOrderNo())) {
-            row.setErrorMsg("订单号");
+            row.setErrorCause("订单号");
             failList.add(row);
             return;
         }
@@ -55,21 +61,21 @@ public class StoreCustomerOrderUploadExcelParser implements ExcelParser<StoreCus
 
     // 解析阶段二 涉及数据库层面的解析
     // 该线程需要处理 tmpList 里的数据
-    public ParseExcelRsp parseInDB(List<StoreCustomerOrderUploadReq> tmpList, String batchNo, int batchLine) {
+    public ParseExcelRsp parseInDB(List<StoreCustomerOrderHead> tmpList, String batchNo, int batchLine) {
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("解析并落库");
+        StopWatch watcher = new StopWatch();
+        watcher.start("解析并落库");
 
 
-
-        // TODO 批量查询,再次解析 tmpList 中哪些成功哪些失败
+        // TODO 1.1再次解析 tmpList 中哪些成功哪些失败
         tmpList.forEach(v -> {
-
-            // 访问数据库
+            // 封装批量查询的条件
         });
+        // TODO 1.2批量查询数据库
 
-        List<StoreCustomerOrderUploadReq> successList = new ArrayList<>(batchLine);
-        List<StoreCustomerOrderUploadReq> failList = new ArrayList<>(batchLine);
+
+        List<StoreCustomerOrderHead> successList = new ArrayList<>(batchLine);
+        List<StoreCustomerOrderHead> failList = new ArrayList<>(batchLine);
 
 
         ParseExcelRsp ret = ParseExcelRsp.builder().build();
@@ -77,11 +83,12 @@ public class StoreCustomerOrderUploadExcelParser implements ExcelParser<StoreCus
         // 将成功数据存入数据库
         if (!CollectionUtils.isEmpty(successList)) {
 
+            // 异步放入数据库
             EXCEL_DATA_2_DB.submit(new Runnable() {
                 @Override
                 public void run() {
 
-                    // TODO 数据落库, 数据暂时不可见. 如果落库失败需要放入到Redis中
+                    // TODO 2.数据落库, 数据暂时不可见. 如果落库失败需要放入到Redis中
                 }
             });
 
@@ -94,19 +101,20 @@ public class StoreCustomerOrderUploadExcelParser implements ExcelParser<StoreCus
             redisTemplate.opsForValue().increment(batchNo + ":FAILSIZE", failList.size());
             redisTemplate.expire(batchNo + ":FAILSIZE", 30, TimeUnit.MINUTES);
 
+            // 异步放入缓存
             EXCEL_DATA_2_DB.submit(new Runnable() {
                 @Override
                 public void run() {
-                    // TODO 失败数据放入Redis,以便后面下载使用
+                    // TODO 3.失败数据放入Redis,以便后面下载使用
                 }
             });
 
             ret.setFailSize(failList.size());
         }
 
-        stopWatch.stop();
+        watcher.stop();
 
-        log.info("线程["+Thread.currentThread().getName()+"]解析" + tmpList.size() + "条数据数据完成,成功" + ret.getSuccessSize() + "条,失败" + ret.getFailSize() + "条,耗时" + stopWatch.getLastTaskTimeMillis() + "毫秒");
+        log.info("线程["+Thread.currentThread().getName()+"]解析" + tmpList.size() + "条数据数据完成,成功" + ret.getSuccessSize() + "条,失败" + ret.getFailSize() + "条,耗时" + watcher.getLastTaskTimeMillis() + "毫秒");
 
 
         return ret;

@@ -61,8 +61,8 @@ public class StoreCustomerOrderAsyncDownloadExcel {
 
     public void download(DownloadStoreCustomerOrderTemplateReq request, OutputStream outputStream, WriteExcelFinishCallback callback) {
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("下载订货单模板数据");
+        StopWatch watcher = new StopWatch();
+        watcher.start("下载订货单模板数据");
 
         ExcelWriter writer = EasyExcel
                 .write(outputStream)
@@ -126,8 +126,8 @@ public class StoreCustomerOrderAsyncDownloadExcel {
         callback.doFinish();
 
 
-        stopWatch.stop();
-        System.out.println("线程:"+Thread.currentThread().getName()+"解析下载耗时" + stopWatch.getLastTaskTimeMillis() + "毫秒");
+        watcher.stop();
+        System.out.println("线程:"+Thread.currentThread().getName()+"解析下载耗时" + watcher.getLastTaskTimeMillis() + "毫秒");
 
     }
 

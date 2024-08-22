@@ -1,10 +1,9 @@
 package com.infuq.provider.controller;
 
 
-import com.infuq.handler.StoreCustomerOrderUploadExcelParser;
-import com.infuq.common.req.StoreCustomerOrderUploadReq;
 import com.infuq.common.rsp.ParseExcelRsp;
-import com.infuq.upload.EasyExcelUploadService;
+import com.infuq.service.upload.StoreCustomerOrderExcelParser;
+import com.infuq.util.upload.easyexcel.ExcelParseService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("storeCustomerOrder")
-public class StoreCustomerOrderUploadExcelController {
+@RequestMapping("storeCustomerOrderExcel")
+public class StoreCustomerOrderExcelController {
 
     @Resource
-    private EasyExcelUploadService easyExcelUploadService;
+    private ExcelParseService parseService;
     @Resource
-    private StoreCustomerOrderUploadExcelParser parser;
+    private StoreCustomerOrderExcelParser parser;
 
     /**
      * 上传
@@ -29,8 +28,8 @@ public class StoreCustomerOrderUploadExcelController {
     @PostMapping(value = "upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ParseExcelRsp upload(@RequestPart("file") MultipartFile file) {
         try {
-            // 采用EasyExcel处理
-            return easyExcelUploadService.handleUpload(file.getInputStream(), StoreCustomerOrderUploadReq.class, parser);
+            // 采用EasyExcel处理, 不同的业务使用不同的parser
+            return parseService.parse(file.getInputStream(), parser);
         } catch (Exception e) {
 
         }
