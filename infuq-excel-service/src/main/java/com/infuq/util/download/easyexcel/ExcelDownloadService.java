@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * 下载Excel
  */
-@Service
+//@Service
 @Slf4j
 public class ExcelDownloadService {
 

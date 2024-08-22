@@ -1,6 +1,7 @@
-package com.infuq.service.download;
+package com.infuq.service.download.easypoi;
 
 
+import cn.afterturn.easypoi.handler.inter.IExcelExportServer;
 import com.infuq.common.req.DownloadStoreCustomerOrderTemplateCondition;
 import com.infuq.util.download.ExcelDownloader;
 import lombok.extern.slf4j.Slf4j;
@@ -13,11 +14,13 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class StoreCustomerOrderExcelDownloader implements ExcelDownloader<DownloadStoreCustomerOrderTemplateCondition> {
+public class StoreCustomerOrderExcelExportServer implements IExcelExportServer {
 
     @Override
-    public List<Object> selectList(DownloadStoreCustomerOrderTemplateCondition condition) {
+    public List<Object> selectListForExcelExport(Object queryParams, int page) {
         return null;
     }
+
+
 }
 
